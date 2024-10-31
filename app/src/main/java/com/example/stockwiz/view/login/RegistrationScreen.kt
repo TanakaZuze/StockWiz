@@ -1,95 +1,92 @@
 package com.example.stockwiz.view.login
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.stockwiz.R
+import androidx.compose.ui.unit.sp
+import com.example.stockwiz.UserDatabaseHelper
 
 @Composable
 fun RegistrationScreen(
+    modifier: Modifier = Modifier,
+    dbHelper: UserDatabaseHelper, // Accept dbHelper
     onNavigateToLogin: () -> Unit
 ) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .background(Color.Gray), // Set background color to match LoginScreen
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Image at the top center, similar to LoginScreen
-        Image(
-            painter = painterResource(id = R.drawable.whatsapp_image_2024_10_26_at_11_29_08), // Replace with actual logo resource
-            contentDescription = "Company Logo",
-            modifier = Modifier.size(200.dp)
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Text(text = "Register", style = androidx.compose.material3.MaterialTheme.typography.headlineMedium)
+        Text("Register", fontSize = 24.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Username field
-        OutlinedTextField(
-            value = "",
-            onValueChange = { /* Handle username input */ },
+        TextField(
+            value = username,
+            onValueChange = { username = it },
             label = { Text("Username") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
+            modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        // Password field
-        OutlinedTextField(
-            value = "",
-            onValueChange = { /* Handle password input */ },
+        TextField(
+            value = password,
+            onValueChange = { password = it },
             label = { Text("Password") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
+            modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation()
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text("Confirm Password") },
+            modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (errorMessage.isNotEmpty()) {
+            Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Email field
-        OutlinedTextField(
-            value = "",
-            onValueChange = { /* Handle email input */ },
-            label = { Text("Email") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Register button
         Button(
-            onClick = { /* Handle registration logic */ },
+            onClick = {
+                if (password == confirmPassword) {
+                    if (dbHelper.insertUser(username, password)) {
+                        onNavigateToLogin() // Navigate back to login
+                    } else {
+                        errorMessage = "User already exists"
+                    }
+                } else {
+                    errorMessage = "Passwords do not match"
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Register")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        // Link back to Login screen
-        Button(
-            onClick = onNavigateToLogin,
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
+        TextButton(onClick = onNavigateToLogin) {
             Text("Already have an account? Login")
         }
     }
