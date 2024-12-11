@@ -2,6 +2,8 @@ package com.example.stockwiz.view.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,6 +29,7 @@ fun RegistrationScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp), // Ensure padding is applied here
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -34,7 +37,7 @@ fun RegistrationScreen(
         Image(
             painter = painterResource(id = R.drawable.logo), // Update with your logo
             contentDescription = "App Logo",
-            modifier = Modifier.size(400.dp)
+            modifier = Modifier.size(280.dp)
         )
         Text(text = "Register", fontSize = 24.sp)
 

@@ -2,6 +2,8 @@ package com.example.stockwiz.view.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -10,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.stockwiz.R
 import com.example.stockwiz.UserDatabaseHelper
 
@@ -27,6 +30,7 @@ fun LoginScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -34,8 +38,12 @@ fun LoginScreen(
         Image(
             painter = painterResource(id = R.drawable.logo), // Update with your logo
             contentDescription = "App Logo",
-            modifier = Modifier.size(400.dp)
+            modifier = Modifier.size(280.dp)
         )
+
+        Text(text = "Log In", fontSize = 24.sp)
+
+        Spacer(modifier = Modifier.height(16.dp))
         TextField(value = username, onValueChange = { username = it }, label = { Text("Username") })
         Spacer(modifier = Modifier.height(8.dp))
         TextField(

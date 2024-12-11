@@ -2,9 +2,10 @@ package com.example.stockwiz.view.main
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,7 +20,7 @@ fun MainPage(
     inventoryDbHelper: InventoryDatabaseHelper,
     modifier: Modifier = Modifier // Modifier for layout customization
 ) {
-    //  variables to hold the item details
+    // variables to hold the item details
     var itemName by remember { mutableStateOf("") }
     var itemQuantity by remember { mutableStateOf("") }
     var itemLowStock by remember { mutableStateOf("") }
@@ -30,11 +31,12 @@ fun MainPage(
         productList = inventoryDbHelper.getAllProducts()
     }
 
-    // main page UI here.
+    // main page UI with scrollable Column
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp), // Ensure padding is applied here
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()), // Make the Column scrollable
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
@@ -52,7 +54,6 @@ fun MainPage(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-
         TextField(
             value = itemQuantity,
             onValueChange = { itemQuantity = it },
@@ -61,7 +62,6 @@ fun MainPage(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-
 
         TextField(
             value = itemLowStock,
@@ -113,8 +113,7 @@ fun MainPage(
             ProductCard(product = product, onDelete = {
                 inventoryDbHelper.deleteProduct(product.id)
                 productList = inventoryDbHelper.getAllProducts()
-            }, onUpdate = {
-            })
+            }, onUpdate = {})
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
